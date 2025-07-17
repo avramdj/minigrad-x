@@ -1,0 +1,2 @@
+recursive-include minigradx *.pyi
+recursive-include src *.hpp 
