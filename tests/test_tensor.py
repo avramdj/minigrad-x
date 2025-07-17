@@ -1,4 +1,4 @@
-from minigradx.tensor import Tensor
+from minigradx import Tensor
 
 
 def test_cpu_tensor_repr():

@@ -3,7 +3,7 @@ import subprocess
 import sys
 from glob import glob
 
-from setuptools import Extension, setup
+from setuptools import Command, Extension, setup
 from setuptools.command.build_ext import build_ext
 
 
@@ -50,6 +50,19 @@ def generate_stubs():
         stubgen_main(["-m", full_mod, "-o", "."])
 
 
+class GenerateStubs(Command):
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        generate_stubs()
+
+
 setup(
     name="minigradx",
     version="0.0.1",
@@ -59,6 +72,7 @@ setup(
     ext_modules=[CMakeExtension("minigradx._C")],
     cmdclass={
         "build_ext": CMakeBuild,
+        "generate_stubs": GenerateStubs,
     },
     zip_safe=False,
     include_package_data=True,
