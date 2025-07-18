@@ -4,6 +4,7 @@
 #include <tensor/cpu/buffer.hpp>
 #include <tensor/cpu/impl.hpp>
 #include <tensor/dtype.hpp>
+#include <tensor/make_tensor_impl.hpp>
 
 namespace minigradx {
 namespace tensor {
@@ -20,20 +21,13 @@ CpuImpl::CpuImpl(const Optional<pybind11::object> &data,
   this->_buffer =
       std::make_shared<CpuBuffer>(shape.flat_size(), DtypeSize(dtype), dtype);
 
-  if (data.has_value()) {
-    pybind11::module_ np = pybind11::module_::import("numpy");
-    pybind11::array np_array = np.attr("array")(
-        data.value(), pybind11::arg("dtype") = to_numpy_dtype_string(dtype),
-        pybind11::arg("copy") = false);
+  Optional<pybind11::array> maybe_host_pynp =
+      object_to_pynp(data, shape, dtype);
 
-    if (static_cast<size_t>(np_array.size()) != shape.flat_size()) {
-      throw std::runtime_error(
-          "Mismatched number of elements between provided data and shape.");
-    }
-    std::memcpy(this->_buffer->unsafe_get_data(), np_array.data(),
-                shape.flat_size() * DtypeSize(dtype));
+  if (maybe_host_pynp.has_value()) {
+    this->_buffer->memcpy_from_host(maybe_host_pynp.value().data(),
+                                    shape.flat_size(), DtypeSize(dtype));
   }
-
   this->_device = device;
   this->_dtype = dtype;
   this->_requires_grad = requires_grad;

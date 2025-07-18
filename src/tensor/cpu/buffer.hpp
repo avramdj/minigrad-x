@@ -18,6 +18,8 @@ public:
   CpuBuffer &operator=(CpuBuffer &&other) = delete;
   std::shared_ptr<Buffer> clone() const override;
   std::shared_ptr<Buffer> getitem(const Index &indices) override;
+  void memcpy_from_host(const void *host_data, const size_t &size,
+                        const size_t &item_size) override;
 };
 
 } // namespace cpu

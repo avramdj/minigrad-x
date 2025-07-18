@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <tensor/dtype.hpp>
+#include <tensor/shape.hpp>
 #include <tensor/utils.hpp>
 
 namespace minigradx {
@@ -27,6 +28,8 @@ public:
   size_t item_size() const { return _item_size; }
   virtual std::shared_ptr<Buffer> clone() const = 0;
   Dtype dtype() const { return _dtype; }
+  virtual void memcpy_from_host(const void *host_data, const size_t &size,
+                                const size_t &item_size) = 0;
 };
 
 } // namespace tensor

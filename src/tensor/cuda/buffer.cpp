@@ -37,6 +37,11 @@ std::shared_ptr<Buffer> CudaBuffer::clone() const {
   return std::make_shared<CudaBuffer>(new_data, _size, _item_size, _dtype);
 }
 
+void CudaBuffer::memcpy_from_host(const void *host_data, const size_t &size,
+                                  const size_t &item_size) {
+  cudaMemcpy(data, host_data, size * item_size, cudaMemcpyHostToDevice);
+}
+
 } // namespace cuda
 } // namespace tensor
 } // namespace minigradx

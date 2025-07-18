@@ -35,6 +35,11 @@ std::shared_ptr<Buffer> CpuBuffer::clone() const {
   return std::make_shared<CpuBuffer>(new_data, _size, _item_size, _dtype);
 }
 
+void CpuBuffer::memcpy_from_host(const void *host_data, const size_t &size,
+                                 const size_t &item_size) {
+  std::memcpy(data, host_data, size * item_size);
+}
+
 } // namespace cpu
 } // namespace tensor
 } // namespace minigradx

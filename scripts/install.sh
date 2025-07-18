@@ -7,4 +7,5 @@ if [ "$1" == "--no-cache" ]; then
     pip uninstall -y minigradx
 fi
 
+rm minigradx/_C.pyi minigradx/_C*.so
 pip install $CACHE_ARGS -e .[dev,cuda]

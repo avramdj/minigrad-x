@@ -55,9 +55,21 @@ class Tensor:
     #         return None
     #     return Tensor._from_impl(self._impl.grad)
 
-    # @property
-    # def shape(self) -> tuple[int, ...]:
-    #     return self._impl.shape
+    @property
+    def shape(self) -> tuple[int, ...]:
+        return self._impl.shape
+
+    @property
+    def size(self) -> int:
+        return self._impl.size
+
+    @property
+    def dtype(self) -> Dtype:
+        return self._impl.dtype
+
+    @property
+    def requires_grad(self) -> bool:
+        return self._impl.requires_grad
 
     @classmethod
     def _from_impl(cls, impl: TensorImpl, copy: bool = False) -> Tensor:

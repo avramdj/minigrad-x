@@ -28,18 +28,25 @@ using arg = py::arg;
 PYBIND11_MODULE(_C, m) {
   m.doc() = "The minigrad-x C API";
 
+  // TENSOR IMPL CLASS
   {
     ADD_CLASS(TensorImpl, m)
     ADD_DUNDER_METHOD(getitem, TensorImpl, arg("indices"))
-    ADD_READONLY_PROPERTY(device, TensorImpl);
+    ADD_READONLY_PROPERTY(device, TensorImpl)
+    ADD_READONLY_PROPERTY(dtype, TensorImpl)
+    ADD_READONLY_PROPERTY(requires_grad, TensorImpl)
+    ADD_READONLY_PROPERTY(shape, TensorImpl)
+    ADD_READONLY_PROPERTY(size, TensorImpl);
   }
 
+  // TENSOR IMPL FACTORY FUNCTIONS
   ADD_FUNCTION(m, make_impl_from_data, arg("data"), arg("requires_grad"),
                arg("device"), arg("dtype"));
 
   ADD_FUNCTION(m, make_impl_from_shape, arg("shape"), arg("requires_grad"),
                arg("device"), arg("dtype"));
 
+  // DTYPE ENUM
   py::enum_<Dtype>(m, "Dtype")
       .value("Float64", Dtype::Float64)
       .value("Float32", Dtype::Float32)
