@@ -42,7 +42,7 @@ class Tensor:
             )
         )
 
-    def __getitem__(self, indices: tuple[int, ...] | list[int]) -> Tensor:
+    def __getitem__(self, indices: int | tuple[int, ...] | list[int]) -> Tensor:
         if isinstance(indices, int):
             indices = [indices]
 
