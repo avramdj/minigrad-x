@@ -2,7 +2,9 @@
 #include <minigradx/utils.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <tensor/make_tensor_impl.hpp>
+#include <tensor/shape.hpp>
 
 namespace py = pybind11;
 
@@ -27,6 +29,10 @@ using arg = py::arg;
 /////////    Actual code    ///////////
 PYBIND11_MODULE(_C, m) {
   m.doc() = "The minigrad-x C API";
+
+  // SHAPE CLASS
+  py::bind_vector<Shape>(m, "Shape",
+                         "A list-like object representing tensor dimensions.");
 
   // TENSOR IMPL CLASS
   {

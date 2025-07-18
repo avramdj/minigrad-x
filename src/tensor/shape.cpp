@@ -11,6 +11,8 @@ size_t Shape::flat_size() const {
   return size;
 }
 
+Shape::Shape(const std::vector<int>& v) : std::vector<int>(v) {}
+
 Shape Shape::from_data(const pybind11::object &data) {
   namespace py = pybind11;
 

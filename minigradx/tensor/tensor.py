@@ -43,6 +43,11 @@ class Tensor:
         )
 
     def __getitem__(self, indices: tuple[int, ...] | list[int]) -> Tensor:
+        if isinstance(indices, int):
+            indices = [indices]
+
+        raise NotImplementedError("Indexing is not implemented yet.")
+
         return self._from_impl(self._impl.__getitem__(indices))
 
     @property
@@ -57,7 +62,7 @@ class Tensor:
 
     @property
     def shape(self) -> tuple[int, ...]:
-        return self._impl.shape
+        return tuple(self._impl.shape)
 
     @property
     def size(self) -> int:

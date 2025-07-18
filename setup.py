@@ -14,10 +14,6 @@ class CMakeExtension(Extension):
 
 
 class CMakeBuild(build_ext):
-    def run(self):
-        super().run()
-        generate_stubs()
-
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
         cmake_args = [
@@ -63,21 +59,27 @@ class GenerateStubs(Command):
         generate_stubs()
 
 
-setup(
-    name="minigradx",
-    version="0.0.1",
-    author="Avram Djordjevic",
-    author_email="avramdjordjevic2@gmail.com",
-    description="A small autograd engine",
-    ext_modules=[CMakeExtension("minigradx._C")],
-    cmdclass={
-        "build_ext": CMakeBuild,
-        "generate_stubs": GenerateStubs,
-    },
-    zip_safe=False,
-    include_package_data=True,
-    extras_require={
-        "dev": ["pytest", "mypy", "setuptools", "ipython"],
-        "cuda": [],
-    },
-)
+def main():
+    setup(
+        name="minigradx",
+        version="0.0.1",
+        author="Avram Djordjevic",
+        author_email="avramdjordjevic2@gmail.com",
+        description="A small autograd engine",
+        ext_modules=[CMakeExtension("minigradx._C")],
+        cmdclass={
+            "build_ext": CMakeBuild,
+            "generate_stubs": GenerateStubs,
+        },
+        zip_safe=False,
+        include_package_data=True,
+        install_requires=["numpy"],
+        extras_require={
+            "dev": ["pytest", "pytest-cov", "mypy", "setuptools", "ipython"],
+            "cuda": [],
+        },
+    )
+
+
+if __name__ == "__main__":
+    main()
