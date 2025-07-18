@@ -69,7 +69,7 @@ class TestTensorCreation:
     def test_zeros_factory(self):
         """Tests the zeros() factory method."""
         shape = (4, 5, 6)
-        tensor = Tensor().zeros(
+        tensor = Tensor.zeros(
             shape, device="cpu", dtype=Dtype.Float32, requires_grad=False
         )
         assert tensor.shape == shape

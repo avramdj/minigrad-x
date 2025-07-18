@@ -26,14 +26,32 @@ class Tensor:
             dtype=dtype,
         )
 
+    @classmethod
     def zeros(
-        self,
+        cls,
         shape: tuple[int, ...],
         device: str = "cpu",
         dtype: Dtype = Dtype.Float32,
         requires_grad: bool = True,
     ) -> Tensor:
-        return self._from_impl(
+        return cls._from_impl(
+            make_impl_from_shape(
+                shape=shape,
+                requires_grad=requires_grad,
+                device=device,
+                dtype=dtype,
+            )
+        )
+
+    @classmethod
+    def ones(
+        cls,
+        shape: tuple[int, ...],
+        device: str = "cpu",
+        dtype: Dtype = Dtype.Float32,
+        requires_grad: bool = True,
+    ) -> Tensor:
+        return cls._from_impl(
             make_impl_from_shape(
                 shape=shape,
                 requires_grad=requires_grad,
@@ -85,3 +103,7 @@ class Tensor:
             tensor._impl = impl
 
         return tensor
+
+
+zeros = Tensor.zeros
+ones = Tensor.ones
