@@ -72,11 +72,11 @@ class Tensor:
     def device(self) -> str:
         return self._impl.device
 
-    # @property
-    # def grad(self) -> Optional[Tensor]:
-    #     if self._impl.grad is None:
-    #         return None
-    #     return Tensor._from_impl(self._impl.grad)
+    @property
+    def grad(self) -> Optional[Tensor]:
+        if self._impl.grad is None:
+            return None
+        return Tensor._from_impl(self._impl.grad)
 
     @property
     def shape(self) -> tuple[int, ...]:

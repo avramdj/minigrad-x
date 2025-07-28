@@ -1,6 +1,7 @@
 #pragma once
 
-#include <stdexcept>
+#include <cstdint>
+#include <string>
 
 namespace minigradx {
 namespace tensor {

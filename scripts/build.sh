@@ -7,6 +7,12 @@ BUILD_DIR="$PROJECT_ROOT/build"
 
 pushd "$PROJECT_ROOT" >/dev/null
 
+# ensure pybind11 submodule is initialized
+git submodule update --init --recursive
+
+# clean up any previous installations of our library
+rm -f minigradx/_C.pyi
+
 # clean + rebuild
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"

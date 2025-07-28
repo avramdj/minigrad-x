@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(minigradx LANGUAGES CXX CUDA)
+project(minigradx LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,19 +7,30 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(third_party/pybind11)
 
-find_package(CUDAToolkit)
+cmake_policy(SET CMP0146 OLD)
+find_package(CUDA QUIET)
 
 file(GLOB_RECURSE SOURCES "src/**/*.cpp")
-file(GLOB_RECURSE CUDA_SOURCES "src/**/*.cu")
+file(GLOB_RECURSE CUDA_CPP_SOURCES "src/tensor/cuda/*.cpp")
+list(REMOVE_ITEM SOURCES ${CUDA_CPP_SOURCES})
 
-pybind11_add_module(_C ${SOURCES} ${CUDA_SOURCES})
+set(ALL_SOURCES ${SOURCES})
+
+if (CUDA_FOUND)
+    message(STATUS "CUDA found, building with CUDA support.")
+    enable_language(CUDA)
+    list(APPEND ALL_SOURCES ${CUDA_CPP_SOURCES})
+    file(GLOB_RECURSE CUDA_SOURCES "src/**/*.cu")
+    list(APPEND ALL_SOURCES ${CUDA_SOURCES})
+endif()
+
+pybind11_add_module(_C ${ALL_SOURCES})
 
 target_include_directories(_C PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(_C PRIVATE CUDA::cudart)
-
 if (CUDA_FOUND)
+    target_compile_definitions(_C PRIVATE WITH_CUDA)
     target_link_libraries(_C PRIVATE CUDA::cudart)
 endif() 

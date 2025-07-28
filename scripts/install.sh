@@ -1,5 +1,10 @@
 #!/bin/bash
 
+git submodule update --init --recursive
+
+# Cleans up any previous installations of our library
+rm -f minigradx/_C.pyi
+
 set -e
 
 if [ "$1" == "--no-cache" ]; then
