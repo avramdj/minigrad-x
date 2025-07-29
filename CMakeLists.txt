@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_subdirectory(third_party/pybind11)
 
 cmake_policy(SET CMP0146 OLD)
-find_package(CUDA QUIET)
+find_package(CUDAToolkit QUIET)
 
 file(GLOB_RECURSE SOURCES "src/**/*.cpp")
 file(GLOB_RECURSE CUDA_CPP_SOURCES "src/tensor/cuda/*.cpp")
@@ -16,9 +16,12 @@ list(REMOVE_ITEM SOURCES ${CUDA_CPP_SOURCES})
 
 set(ALL_SOURCES ${SOURCES})
 
-if (CUDA_FOUND)
-    message(STATUS "CUDA found, building with CUDA support.")
+option(USE_CUDA "Enable CUDA support" OFF)
+
+if(USE_CUDA AND NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    message(STATUS "CUDA support is enabled.")
     enable_language(CUDA)
+    set(CMAKE_CUDA_STANDARD 20)
     list(APPEND ALL_SOURCES ${CUDA_CPP_SOURCES})
     file(GLOB_RECURSE CUDA_SOURCES "src/**/*.cu")
     list(APPEND ALL_SOURCES ${CUDA_SOURCES})
